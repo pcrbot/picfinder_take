@@ -59,10 +59,10 @@ async def start_finder(bot, ev: CQEvent):
         ct = 0
         while pls.get_on_off_status(gid):
             if datetime.now() < pls.timeout[gid] and ct<10:
-                await asyncio.sleep(30)
+                await asyncio.sleep(SEARCH_TIMEOUT/2)
                 if ct != pls.count[gid]:
                     ct = pls.count[gid]
-                    pls.timeout[gid] = datetime.now()+timedelta(seconds=30)
+                    pls.timeout[gid] = datetime.now()+timedelta(seconds=SEARCH_TIMEOUT)
             else:
                 pls.turn_off(ev.group_id)
                 await bot.send(ev, f"由于超时，已为您自动退出搜图模式，以后要记得说“谢谢{NICKNAME[0]}”来退出搜图模式噢~")
