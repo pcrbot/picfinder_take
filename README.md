@@ -9,7 +9,7 @@
 
 - 搜索SauceNao，在相似率过低时自动补充搜索ascii2d，相似率阈值可在config中调整。搜索结果显示数量可在config中调整。  
 
-- 解析SauceNao和ascii2d搜索结果的作品详细信息。SauceNao全部index格式解析都已完成；ascii2d常见格式应该也能解析，一些奇怪格式的外部登录不敢保证）  
+- 解析SauceNao和ascii2d搜索结果的作品详细信息。SauceNao全部42个index格式解析都已完成；ascii2d常见格式应该也能解析，一些奇怪格式的外部登录不敢保证）  
 
 - 获取SauceNao和ascii2d的结果缩略图，缩略图可在config中关闭。  
 
