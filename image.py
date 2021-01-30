@@ -417,9 +417,9 @@ class ascii2d():
                 thumb_url =  f"https://ascii2d.net{thumb_url}"
 
                 if not data.xpath('.//div[@class="detail-box gray-link"]/h6'):
-                    data2=data.xpath('.//div[@class="external"]')[0]
+                    data2=data.xpath('.//div[@class="external"]')[0] if data.xpath('.//div[@class="external"]') else data
                     info_url = data2.xpath('.//a/@href')[0].strip() if data.xpath('.//a/@href') else "no link"
-                    tag="外部登录"
+                    tag="外部登录" if info_url=="no link" else info_url.split('/')[2]
                 else:
                     data2=data.xpath('.//div[@class="detail-box gray-link"]/h6')[0]
                     info_url = data2.xpath(".//a/@href")[0].strip()
