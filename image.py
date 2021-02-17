@@ -267,7 +267,6 @@ def sauces_info(sauce):
             
         elif sauce['header']['index_id'] == 36:
             service_name='Madokami (Manga)'
-            illust_id=sauce['data']['mu_id']
             source = sauce['data']['source']
             part = sauce['data']['part']
             
