@@ -1,11 +1,12 @@
-import requests
+import requests, re
 
 from lxml import etree
 from io import BytesIO
 from PIL import Image, ImageDraw
 from random import randint
+from traceback import format_exc
 
-from hoshino import log
+from hoshino import log, aiorequests
 from hoshino.typing import CQEvent, MessageSegment
 from hoshino.util import pic2b64
 
@@ -14,12 +15,12 @@ try:
 except:
     import json
 
-from .config import SAUCENAO_RESULT_NUM, ASCII_RESULT_NUM, THUMB_ON
+from .config import SAUCENAO_RESULT_NUM, ASCII_RESULT_NUM, THUMB_ON, proxies
 
 logger = log.new_logger('image')
 
 def get_pic(address):
-    return requests.get(address,timeout=20).content
+    return requests.get(address,timeout=20, proxies=proxies).content
 
 def randcolor():
     return (randint(0, 255), randint(0, 255), randint(0, 255))
@@ -34,7 +35,52 @@ def ats_pic(img):
     img.putpixel((width,0), randcolor())
     img.putpixel((width,height), randcolor())
     return img
-   
+
+async def check_screenshot(bot, file, imgurl):
+    try:
+        image = Image.open(BytesIO(await (await aiorequests.get(imgurl, stream=True, proxies=proxies)).content))
+    except:
+        print("download failed")
+        return 0
+    cord = image.size[0]/image.size[1]
+    height=image.size[1]
+    print(cord)
+    if cord>0.565:
+        print("too short, not likely a screen shot")
+        return 0
+    if cord<0.2:
+        print("too long, might be long screen shot")
+        return 2
+    print("size checked, next ocr")
+    try:
+        ocr_result = await bot.call_action(action='.ocr_image', image=file)
+    except:
+        print("ocr failed")
+        return False
+    flag=0
+    for result in ocr_result['texts']:
+        key1 = re.search('[0-9]{1,2}:[0-9]{2}', result['text'])   #时间
+        key2 = re.search('移动|联通|电信', result['text'])
+        key3 = re.search('4G|5G', result['text'])
+        key4 = re.search('[0-9]{1,2}%', result['text'])   #电量
+        key5 = re.search('[0-9]{0,3}[\\\/][0-9]{0,3}', result['text'])  #页数
+        if key2 or key3 or key4:
+            print(str(result))
+            loc=result['coordinates'][2]['y']
+            if int(loc)<(int(height)/19):
+                flag=1
+        if key1 or key5:
+            print(str(result))
+            loc=result['coordinates'][2]['y']
+            if int(loc)<(int(height)/19) or int(loc)>(int(height)*18/20) :
+                flag=1
+        if flag:
+            break
+    if flag:
+        #print(f"time mark found:{string}")
+        return 1
+    else:
+        return 0
 
 def sauces_info(sauce):
     service_name=''
@@ -324,7 +370,7 @@ def sauces_info(sauce):
         index = sauce['header']['index_id']
         service_name = f'Index #{index}'
         info ="no info"
-        print(e)
+        print(format_exc())
 
     return service_name, info
 
@@ -346,7 +392,7 @@ class SauceNAO():
     def get_sauce(self, url):
         self.params['url'] = url
         logger.debug(f"Now starting get the SauceNAO data:{url}")
-        response = requests.get('https://saucenao.com/search.php', params=self.params,timeout=15)
+        response = requests.get('https://saucenao.com/search.php', params=self.params, timeout=15, proxies=proxies)
         data = response.json()
         
         return data
@@ -370,7 +416,7 @@ class SauceNAO():
                     try:
                         thumbnail_image = str(MessageSegment.image(pic2b64(ats_pic(Image.open(BytesIO(get_pic(thumbnail_url)))))))
                     except Exception as e:
-                        print(e)
+                        print(format_exc())
                         thumbnail_image = "[预览图下载失败]"
                 else:
                     thumbnail_image = ""
@@ -384,7 +430,7 @@ class SauceNAO():
                     repass = putline
 
             except Exception as e:
-                print(e)
+                print(format_exc())
                 #print(sauce)
                 pass
         
@@ -401,7 +447,7 @@ class ascii2d():
         if data is not None:
             html = data
         else:
-            html_data = requests.get(url, timeout=15)
+            html_data = requests.get(url, timeout=15, proxies=proxies)
             html = etree.HTML(html_data.text)
 
         all_data = html.xpath('//div[@class="row item-box"]')
@@ -417,7 +463,7 @@ class ascii2d():
 
                 if not data.xpath('.//div[@class="detail-box gray-link"]/h6'):
                     data2=data.xpath('.//div[@class="external"]')[0] if data.xpath('.//div[@class="external"]') else data
-                    info_url = data2.xpath('.//a/@href')[0].strip() if data.xpath('.//a/@href') else "no link"
+                    info_url = data2.xpath('.//a/@href')[0].strip() if data.xpath('.//a/@rel') else "no link"
                     tag="外部登录" if info_url=="no link" else info_url.split('/')[2]
                 else:
                     data2=data.xpath('.//div[@class="detail-box gray-link"]/h6')[0]
@@ -436,6 +482,7 @@ class ascii2d():
                 
                 info.append([info_url, tag, thumb_url, title])
             except Exception as e:
+                print(format_exc())
                 logger.error(e)
                 continue
 
@@ -449,7 +496,7 @@ class ascii2d():
                 try:
                     thumbnail_image = str(MessageSegment.image(pic2b64(ats_pic(Image.open(BytesIO(get_pic(line[2])))))))
                 except Exception as e:
-                    print(e)
+                    print(format_exc())
                     thumbnail_image = "[预览图下载失败]"
             else:
                 thumbnail_image = ""
@@ -466,10 +513,10 @@ class ascii2d():
         logger.debug("Now starting get the {}".format(url_index))
 
         try:
-            html_index_data = requests.get(url_index, timeout=7)
+            html_index_data = requests.get(url_index, timeout=7, proxies=proxies)
             html_index = etree.HTML(html_index_data.text)
         except Exception as e:
-            print(e)
+            print(format_exc())
             logger.error(f"ascii2d get html data failed: {e}")
             return [putline1, putline2]
 
@@ -509,7 +556,7 @@ async def get_image_data_sauce(image_url: str, api_key: str):
             simimax = result[1]
             repass = "\n".join([header, result[0]])
     except Exception as e:
-        logger.error(e)
+        logger.error(format_exc())
         return ["SauceNAO搜索失败……", 0]
 
     return [repass, simimax]
@@ -533,7 +580,7 @@ async def get_image_data_ascii(image_url: str):
             if putline[1]:
                 repass2 = "\n".join([header, putline[1]])
     except Exception as e:
-        logger.error(e)
+        logger.error(format_exc())
         return ["ascii2d搜索失败……",""]
 
     return [repass1, repass2]
