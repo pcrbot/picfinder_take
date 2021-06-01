@@ -5,6 +5,10 @@
 
 代码主体部分来自于 [@Watanabe-Asa](https://github.com/Watanabe-Asa)大佬的 [搜图](https://github.com/pcrbot/Salmon-plugin-transplant#%E6%90%9C%E5%9B%BE)与 [@Cappuccilo](https://github.com/Cappuccilo)大佬的 [以图搜图](https://github.com/pcrbot/cappuccilo_plugins#%E4%BB%A5%E5%9B%BE%E6%90%9C%E5%9B%BE)，感谢各位大佬的代码）
 
+6.1更新：增加私聊搜图、截屏识别和代理功能
+
+todo:把requests全换成异步（咕咕咕）
+
 ## 特点  
 
 - 搜索SauceNao，在相似率过低时自动补充搜索ascii2d，相似率阈值可在config中调整。搜索结果显示数量可在config中调整。  
@@ -22,6 +26,8 @@
 - New！增加简单的手机截屏识别功能，判断为整屏手机截屏时会拒绝搜索 ~~（你会截你马个图.jpg）~~
 
 - New！增加私聊搜图功能，有效缓解腾讯吞图（但反之临时会话下搜索结果很容易被吞，要稳定使用需加bot好友）
+
+- New！增加代理设置，方便qiang内使用
 
 
 ## 用法
