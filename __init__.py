@@ -68,8 +68,8 @@ async def start_finder(bot, ev: CQEvent):
                     ct = pls.count[gid]
                     pls.timeout[gid] = datetime.now()+timedelta(seconds=30)
             else:
+                await bot.send(ev, f"[CQ:at,qq={pls.on[gid]}] 由于超时，已为您自动退出搜图模式，以后要记得说“谢谢{NICKNAME[0]}”来退出搜图模式噢~")
                 pls.turn_off(ev.group_id)
-                await bot.send(ev, f"由于超时，已为您自动退出搜图模式，以后要记得说“谢谢{NICKNAME[0]}”来退出搜图模式噢~")
                 return
     if not priv.check_priv(ev, priv.SUPERUSER):
         if not lmtd.check(uid):
@@ -124,6 +124,49 @@ async def picmessage(bot, ev: CQEvent):
                 return
     if pls.get_on_off_status(ev.group_id):
         pls.count_plus(ev.group_id)
+
+    await bot.send(ev, '正在搜索，请稍候～')
+    await picfinder(bot, ev, url)
+
+
+@sv.on_message('group')
+async def replymessage(bot, ev: CQEvent):
+    mid= ev.message_id
+    uid = ev.user_id
+    ret = re.search(r"\[CQ:reply,id=(-?\d*)\](.*)", str(ev.message))
+    if not ret:
+        return
+    tmid=ret.group(1)
+    cmd=ret.group(2).strip()
+    cmdlist = []
+    flag=0
+    for name in NICKNAME:
+        for pfcmd in ['识图','搜图','查图','找图']:
+            if name+pfcmd in cmd:
+                flag=1
+                break
+        if flag:
+            break
+    if not flag:
+        return
+    tmsg= await bot.get_msg(self_id=ev.self_id, message_id=int(tmid))
+    ret = re.search(r"\[CQ:image,file=(.*)?,url=(.*)\]", str(tmsg["message"]))
+    if not ret:
+        await bot.send(ev, '未找到图片~')
+        return
+    file= ret.group(1)
+    url = ret.group(2)
+    if CHECK:
+        result = await check_screenshot(bot, file, url)
+        if result:
+            if result==1:
+                await bot.send(ev, f'[CQ:reply,id={mid}]该图似乎是手机截屏，请手动进行适当裁剪后再尝试搜图~\n*请注意搜索漫画时务必截取一个完整单页进行搜图~')
+            if result==2:
+                await bot.send(ev, f'[CQ:reply,id={mid}]该图似乎是长图拼接，请手动进行适当裁剪后再尝试搜图~\n*请注意搜索漫画时务必截取一个完整单页进行搜图~')
+            return
+    if not priv.check_priv(ev, priv.SUPERUSER):
+        if not lmtd.check(uid):
+            await bot.send(ev, f'您今天已经搜过{DAILY_LIMIT}次图了，休息一下明天再来吧～', at_sender=True)
 
     await bot.send(ev, '正在搜索，请稍候～')
     await picfinder(bot, ev, url)
