@@ -15,7 +15,7 @@ try:
 except:
     import json
 
-from .config import SAUCENAO_RESULT_NUM, ASCII_RESULT_NUM, THUMB_ON, proxies, ASCII_PROXY
+from .config import SAUCENAO_RESULT_NUM, ASCII_RESULT_NUM, THUMB_ON, proxies, HOST_CUSTOM
 
 logger = log.new_logger('image')
 
@@ -386,13 +386,14 @@ class SauceNAO():
         params['db'] = db
         params['numres'] = numres
         self.params = params
+        self.host = HOST_CUSTOM['SAUCENAO'] or 'https://saucenao.com'
         self.header = "————>saucenao<————"
 
 
     async def get_sauce(self, url):
         self.params['url'] = url
         logger.debug(f"Now starting get the SauceNAO data:{url}")
-        response = await aiorequests.get('https://saucenao.com/search.php', params=self.params, timeout=15, proxies=proxies)
+        response = await aiorequests.get(f'{self.host}/search.php', params=self.params, timeout=15, proxies=proxies)
         data = await response.json()
         
         return data
@@ -440,7 +441,7 @@ class SauceNAO():
 class ascii2d():
     def __init__(self, num=2):
         self.num = num
-        self.host = ASCII_PROXY or "https://ascii2d.net"
+        self.host = HOST_CUSTOM['ASCII'] or "https://ascii2d.net"
         self.header = "————>ascii2d<————"
 
 
