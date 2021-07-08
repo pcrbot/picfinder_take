@@ -16,8 +16,12 @@ THUMB_ON = True      # 是否启用缩略图
 
 CHECK = True      # 是否开启手机截屏判定
 
-ASCII_PROXY = ""   #ascii反代，如果不清楚作用请留空
-                   #目前已知一个的反代站： https://ascii2d.dihe.moe
+HOST_CUSTOM = {
+                  # 自定义Host，不使用留空即可
+                  # 格式示例：'https://ascii2d.net' , 'http://localhost:12345'   
+                  'SAUCENAO': '',
+                  'ASCII': ''
+              }
 
 proxies={ 
                'http':'',
