@@ -15,7 +15,7 @@ try:
 except:
     import json
 
-from .config import SAUCENAO_RESULT_NUM, ASCII_RESULT_NUM, THUMB_ON, proxies
+from .config import SAUCENAO_RESULT_NUM, ASCII_RESULT_NUM, THUMB_ON, proxies, ASCII_PROXY
 
 logger = log.new_logger('image')
 
@@ -440,6 +440,7 @@ class SauceNAO():
 class ascii2d():
     def __init__(self, num=2):
         self.num = num
+        self.host = ASCII_PROXY or "https://ascii2d.net"
         self.header = "————>ascii2d<————"
 
 
@@ -459,7 +460,7 @@ class ascii2d():
                 if not data.xpath('.//img[@loading="lazy"]/@src'):
                     continue
                 thumb_url =  data.xpath('.//img[@loading="lazy"]/@src')[0].strip()
-                thumb_url =  f"https://ascii2d.net{thumb_url}"
+                thumb_url =  f"{self.host}{thumb_url}"
 
                 if not data.xpath('.//div[@class="detail-box gray-link"]/h6'):
                     data2=data.xpath('.//div[@class="external"]')[0] if data.xpath('.//div[@class="external"]') else data
@@ -509,8 +510,8 @@ class ascii2d():
     async def get_view(self, ascii2d) -> str:
         putline1 = ''
         putline2 = ''
-        url_index = "https://ascii2d.net/search/url/{}".format(ascii2d)
-        logger.debug("Now starting get the {}".format(url_index))
+        url_index = f"{self.host}/search/url/{ascii2d}"
+        logger.debug(f"Now starting get the {url_index}")
 
         try:
             html_index_data = await aiorequests.get(url_index, timeout=7, proxies=proxies)
@@ -525,7 +526,7 @@ class ascii2d():
         if neet_div:
 
             a_url_foot = neet_div[0].xpath('./span/a/@href')
-            url2 = "https://ascii2d.net{}".format(a_url_foot[1])
+            url2 = f"{self.host}{a_url_foot[1]}"
 
             color = await self.get_search_data('', data=html_index)
             bovw = await self.get_search_data(url2)
