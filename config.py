@@ -16,6 +16,9 @@ THUMB_ON = True      # 是否启用缩略图
 
 CHECK = True      # 是否开启手机截屏判定
 
+ASCII_PROXY = ""   #ascii反代，如果不清楚作用请留空
+                   #目前已知一个的反代站： https://ascii2d.dihe.moe
+
 proxies={ 
                'http':'',
                'https':''
