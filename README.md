@@ -11,7 +11,7 @@
 
 6.24更新：增加回复搜图功能，搜图请求更换为异步（感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
-7.9更新：增加自定义HOST功能，在qiang内又不想用全局代理的用户(?)可以单独为SauceNao和ascii2d配置反代或ip直连）
+7.9更新：增加自定义HOST功能，在qiang内又不想用全局代理的用户(?)可以单独为SauceNao和ascii2d配置反代或ip直连）（继续感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
 ## 特点  
 
