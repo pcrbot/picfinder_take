@@ -11,6 +11,8 @@
 
 6.24更新：增加回复搜图功能，搜图请求更换为异步（感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
+7.9更新：增加自定义HOST功能，在qiang内又不想用全局代理的用户(?)可以单独为SauceNao和ascii2d配置反代或ip直连）
+
 ## 特点  
 
 - 搜索SauceNao，在相似率过低时自动补充搜索ascii2d，相似率阈值可在config中调整。搜索结果显示数量可在config中调整。  
