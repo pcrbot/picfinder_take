@@ -91,13 +91,13 @@ def sauces_info(sauce):
             title = sauce['data']['title']
             part = sauce['data']['part']
             date = sauce['data']['date']
-            info = f"{title}-{part}/date"
+            info = f"{title}-{part}/{date}"
 
         #index 1 "h-anime" disabled
 
         elif sauce['header']['index_id'] == 2:
             service_name='H-Game CG'
-            getchu_id=sauce['data']['getchu_id']
+            #getchu_id=sauce['data']['getchu_id']
             company = sauce['data']['company']
             title = sauce['data']['title']
             info = f"[{company}] {title}"
@@ -108,8 +108,8 @@ def sauces_info(sauce):
 
         elif sauce['header']['index_id'] == 5 or sauce['header']['index_id'] == 6:
             service_name='pixiv'
-            member_id = sauce['data']['member_id']
-            illust_id=sauce['data']['pixiv_id']
+            #member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['pixiv_id']
             author_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
@@ -120,32 +120,32 @@ def sauces_info(sauce):
 
         elif sauce['header']['index_id'] == 8:
             service_name='nico nico seiga'
-            member_id = sauce['data']['member_id']
-            illust_id=sauce['data']['seiga_id']
+            #member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['seiga_id']
             author_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 9:
             service_name='Danbooru'
-            illust_id=sauce['data']['danbooru_id']
-            source = sauce['data']['source']
+            #illust_id=sauce['data']['danbooru_id']
+            #source = sauce['data']['source']
             creator = sauce['data']['creator']
             material = sauce['data']['material']
             info = f"[{creator}]({material})"
             
         elif sauce['header']['index_id'] == 10:
             service_name='drawr Images'
-            member_id = sauce['data']['member_id']
-            illust_id=sauce['data']['drawr_id']
+            #member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['drawr_id']
             author_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 11:
             service_name='Nijie Images'
-            member_id = sauce['data']['member_id']
-            illust_id=sauce['data']['nijie_id']
+            #member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['nijie_id']
             author_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
@@ -153,9 +153,9 @@ def sauces_info(sauce):
         elif sauce['header']['index_id'] == 12:
             service_name='Yande.re'
             creator = sauce['data']['creator']
-            yandere_id=sauce['data']['yandere_id']
+            #yandere_id=sauce['data']['yandere_id']
             material = sauce['data']['material']
-            source = sauce['data']['source']
+            #source = sauce['data']['source']
             info = f"[{creator}]({material})"
 
         #index 13 "animeop" disabled
@@ -186,7 +186,7 @@ def sauces_info(sauce):
 
         elif sauce['header']['index_id'] == 20:
             service_name='MediBang'
-            member_id = sauce['data']['member_id']
+            #member_id = sauce['data']['member_id']
             member_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{member_name}」"
@@ -194,7 +194,7 @@ def sauces_info(sauce):
         elif sauce['header']['index_id'] == 21:
             service_name='Anime'
             title = sauce['data']['source']
-            anidb_id = sauce['data']['anidb_aid']
+            #anidb_id = sauce['data']['anidb_aid']
             year = sauce['data']['year']
             part = sauce['data']['part']
             est_time = sauce['data']['est_time']
@@ -204,7 +204,7 @@ def sauces_info(sauce):
         elif sauce['header']['index_id'] == 22:
             service_name='H-Anime'
             title = sauce['data']['source']
-            anidb_id = sauce['data']['anidb_aid']
+            #anidb_id = sauce['data']['anidb_aid']
             year = sauce['data']['year']
             part = sauce['data']['part']
             est_time = sauce['data']['est_time']
@@ -214,9 +214,9 @@ def sauces_info(sauce):
         elif sauce['header']['index_id'] == 23:
             service_name='IMDb-Movies'
             title = sauce['data']['source']
-            imdb_id = sauce['data']['imdb_id']
+            #imdb_id = sauce['data']['imdb_id']
             year = sauce['data']['year']
-            part = sauce['data']['part']
+            #part = sauce['data']['part']
             est_time = sauce['data']['est_time']
             time = est_time.split('/')[0]
             info = f"《{title}》/{year}，{time}"
@@ -224,7 +224,7 @@ def sauces_info(sauce):
         elif sauce['header']['index_id'] == 24:
             service_name='IMDb-Shows'
             title = sauce['data']['source']
-            imdb_id = sauce['data']['imdb_id']
+            #imdb_id = sauce['data']['imdb_id']
             year = sauce['data']['year']
             part = sauce['data']['part']
             est_time = sauce['data']['est_time']
@@ -233,7 +233,7 @@ def sauces_info(sauce):
             
         elif sauce['header']['index_id'] == 25:
             service_name='Gelbooru'
-            illust_id=sauce['data']['gelbooru_id']
+            #illust_id=sauce['data']['gelbooru_id']
             creator = sauce['data']['creator']
             material = sauce['data']['material']
             info = f"[{creator}]({material})"
@@ -242,19 +242,19 @@ def sauces_info(sauce):
             service_name='Konachan'
             creator = sauce['data']['creator']
             material = sauce['data']['material']
-            illust_id=sauce['data']['konachan_id']
+            #illust_id=sauce['data']['konachan_id']
             info = f"[{creator}]({material})"
         
         elif sauce['header']['index_id'] == 27:
             service_name='Sankaku Channel'
-            illust_id=sauce['data']['sankaku_id']
+            #illust_id=sauce['data']['sankaku_id']
             creator = sauce['data']['creator']
             material = sauce['data']['material']
             info = f"[{creator}]({material})"
             
         elif sauce['header']['index_id'] == 28:
             service_name='Anime-Pictures.net'
-            illust_id=sauce['data']['anime-pictures_id']
+            #illust_id=sauce['data']['anime-pictures_id']
             creator = sauce['data']['creator']
             material = sauce['data']['material']
             info = f"[{creator}]({material})"
@@ -262,52 +262,52 @@ def sauces_info(sauce):
         elif sauce['header']['index_id'] == 29:
             service_name='e621.net'
             creator = sauce['data']['creator']
-            e621_id=sauce['data']['e621_id']
+            #e621_id=sauce['data']['e621_id']
             material=sauce['data']['material']
             info = f"[{creator}]({material})"
 
         elif sauce['header']['index_id'] == 30:
             service_name='Idol Complex'
             creator = sauce['data']['creator']
-            idol_id=sauce['data']['idol_id']
+            #idol_id=sauce['data']['idol_id']
             material=sauce['data']['material']
             info = f"[{creator}]({material})"
         
         elif sauce['header']['index_id'] == 31:
             service_name='bcy.net Illust'
-            member_id = sauce['data']['member_id']
-            illust_id=sauce['data']['bcy_id']
+            #member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['bcy_id']
             author_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 32:
             service_name='bcy.net Cosplay'
-            member_id = sauce['data']['member_id']
-            illust_id=sauce['data']['bcy_id']
+            #member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['bcy_id']
             author_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 33:
             service_name='PortalGraphics.net'
-            illust_id=sauce['data']['pg_id']
-            member_id = sauce['data']['member_id']
+            #illust_id=sauce['data']['pg_id']
+            #member_id = sauce['data']['member_id']
             member_name = sauce['data']['member_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{member_name}」"
         
         elif sauce['header']['index_id'] == 34:
             service_name='deviantArt'
-            illust_id=sauce['data']['da_id']
+            #illust_id=sauce['data']['da_id']
             author_name = sauce['data']['author_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 35:
             service_name='Pawoo.net'
-            illust_id=sauce['data']['pawoo_id']
-            member_id = sauce['data']['pawoo_user_acct']
+            #illust_id=sauce['data']['pawoo_id']
+            #member_id = sauce['data']['pawoo_user_acct']
             author_name = sauce['data']['pawoo_user_display_name']
             info = f"「{illust_id}」/「{author_name}」"
             
@@ -320,7 +320,7 @@ def sauces_info(sauce):
 
         elif sauce['header']['index_id'] == 37:
             service_name='MangaDex'
-            illust_id=sauce['data']['md_id']
+            #illust_id=sauce['data']['md_id']
             artist = sauce['data']['artist']
             author = sauce['data']['author']
             source = sauce['data']['source']
@@ -333,30 +333,30 @@ def sauces_info(sauce):
             
         elif sauce['header']['index_id'] == 39:
             service_name='Artstation'
-            member_id = sauce['data']['author_url']
-            illust_id=sauce['data']['as_project']
+            #member_id = sauce['data']['author_url']
+            #illust_id=sauce['data']['as_project']
             author_name = sauce['data']['author_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
         
         elif sauce['header']['index_id'] == 40:
             service_name='FurAffinity'
-            member_id = sauce['data']['fa_id']
+            #member_id = sauce['data']['fa_id']
             author_name = sauce['data']['author_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 41:
             service_name='Twitter'
-            member_id = sauce['data']['twitter_user_id']
-            illust_id=sauce['data']['tweet_id']
+            #member_id = sauce['data']['twitter_user_id']
+            #illust_id=sauce['data']['tweet_id']
             author_name = sauce['data']['twitter_user_handle']
             time= sauce['data']['created_at']
             info = f"「{time[0:10]}」/「{author_name}」"
             
         elif sauce['header']['index_id'] == 42:
             service_name='Furry Network'
-            illust_id = sauce['data']['fn_id']
+            #illust_id = sauce['data']['fn_id']
             author_name = sauce['data']['author_name']
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
