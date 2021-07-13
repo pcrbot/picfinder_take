@@ -306,7 +306,7 @@ def sauces_info(sauce):
             
         elif sauce['header']['index_id'] == 35:
             service_name='Pawoo.net'
-            #illust_id=sauce['data']['pawoo_id']
+            illust_id=sauce['data']['pawoo_id']
             #member_id = sauce['data']['pawoo_user_acct']
             author_name = sauce['data']['pawoo_user_display_name']
             info = f"「{illust_id}」/「{author_name}」"
