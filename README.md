@@ -3,7 +3,7 @@
 
 这个插件的主要思路其实是在hoshino上还原隔壁 [@Tsuk1ko](https://github.com/Tsuk1ko) 大佬家的[竹竹](https://github.com/Tsuk1ko/cq-picsearcher-bot)的搜图交互体验（所以插件名是たけ）
 
-代码主体部分来自于 [@Watanabe-Asa](https://github.com/Watanabe-Asa)大佬的 [搜图](https://github.com/pcrbot/Salmon-plugin-transplant#%E6%90%9C%E5%9B%BE)与 [@Cappuccilo](https://github.com/Cappuccilo)大佬的 [以图搜图](https://github.com/pcrbot/cappuccilo_plugins#%E4%BB%A5%E5%9B%BE%E6%90%9C%E5%9B%BE)，感谢各位大佬的代码）
+代码主体部分参考了 [@Watanabe-Asa](https://github.com/Watanabe-Asa)大佬的 [搜图](https://github.com/pcrbot/Salmon-plugin-transplant#%E6%90%9C%E5%9B%BE)与 [@Cappuccilo](https://github.com/Cappuccilo)大佬的 [以图搜图](https://github.com/pcrbot/cappuccilo_plugins#%E4%BB%A5%E5%9B%BE%E6%90%9C%E5%9B%BE)，感谢各位大佬的代码）
 
 ---
 
