@@ -13,7 +13,7 @@ from hoshino.config import NICKNAME
 from .image import get_image_data_sauce, get_image_data_ascii, check_screenshot
 from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK
 
-if type(NICKNAME)!=list:
+if type(NICKNAME) == str:
     NICKNAME=[NICKNAME]
 
 sv = Service('picfinder', help_=helptext)
@@ -85,6 +85,9 @@ async def start_finder(bot, ev: CQEvent):
             if result==2:
                 await bot.send(ev, f'[CQ:reply,id={mid}]该图似乎是长图拼接，请进行适当裁剪后再尝试搜图~\n*请注意搜索漫画时务必截取一个完整单页进行搜图~')
             return
+    if 'c2cpicdw.qpic.cn/offpic_new/' in image_data:
+        md5=file[:-6].upper()
+        image_data=f"http://gchat.qpic.cn/gchatpic_new/0/0-0-{md5}/0?term=2"
     await bot.send(ev, '正在搜索，请稍候～')
     await picfinder(bot, ev, image_data)
 
@@ -124,7 +127,9 @@ async def picmessage(bot, ev: CQEvent):
                 return
     if pls.get_on_off_status(ev.group_id):
         pls.count_plus(ev.group_id)
-
+    if 'c2cpicdw.qpic.cn/offpic_new/' in url:
+        md5=file[:-6].upper()
+        url=f"http://gchat.qpic.cn/gchatpic_new/0/0-0-{md5}/0?term=2"
     await bot.send(ev, '正在搜索，请稍候～')
     await picfinder(bot, ev, url)
 
@@ -138,18 +143,24 @@ async def replymessage(bot, ev: CQEvent):
         return
     tmid=ret.group(1)
     cmd=ret.group(2).strip()
-    cmdlist = []
-    flag=0
-    for name in NICKNAME:
-        for pfcmd in ['识图','搜图','查图','找图']:
-            if name+pfcmd in cmd:
-                flag=1
+    flag1=0
+    flag2=0
+    if f"[CQ:at,qq={ev.self_id}]" in cmd:
+        flag1=1
+    else:
+        for name in NICKNAME:
+            if name in cmd:
+                flag1=1
                 break
-        if flag:
-            break
-    if not flag:
+    for pfcmd in ['识图','搜图','查图','找图']:
+        if pfcmd in cmd:
+            flag2=1
+    if not (flag1 and flag2):
         return
-    tmsg= await bot.get_msg(self_id=ev.self_id, message_id=int(tmid))
+    try:
+        tmsg= await bot.get_msg(self_id=ev.self_id, message_id=int(tmid))
+    except ActionFailed:
+        await bot.finish(ev, '该消息已过期，请重新转发~')
     ret = re.search(r"\[CQ:image,file=(.*)?,url=(.*)\]", str(tmsg["message"]))
     if not ret:
         await bot.send(ev, '未找到图片~')
@@ -167,7 +178,9 @@ async def replymessage(bot, ev: CQEvent):
     if not priv.check_priv(ev, priv.SUPERUSER):
         if not lmtd.check(uid):
             await bot.send(ev, f'您今天已经搜过{DAILY_LIMIT}次图了，休息一下明天再来吧～', at_sender=True)
-
+    if 'c2cpicdw.qpic.cn/offpic_new/' in url:
+        md5=file[:-6].upper()
+        url=f"http://gchat.qpic.cn/gchatpic_new/0/0-0-{md5}/0?term=2"
     await bot.send(ev, '正在搜索，请稍候～')
     await picfinder(bot, ev, url)
 
@@ -244,7 +257,7 @@ async def picprivite(ctx):
     sid=int(ctx["self_id"])
     uid=int(ctx["sender"]["user_id"])
     gid=0
-    ret = re.match(r"\[CQ:image,file=.*?,url=(.*?)\]", str(ctx['message']))
+    ret = re.match(r"\[CQ:image,file=(.*?),url=(.*?)\]", str(ctx['message']))
     if not ret:
         if '搜图' in str(ctx['message']) or '搜图' in str(ctx['message']) or '查图' in str(ctx['message']) or '找图' in str(ctx['message']):
             await bot.send_msg(self_id=sid, user_id=uid, group_id=gid, message=f'私聊搜图请直接发送图片~')
@@ -255,7 +268,11 @@ async def picprivite(ctx):
     if type == "group":
         gid=int(ctx["sender"]["group_id"])
         await bot.send_msg(self_id=sid, user_id=uid, group_id=gid, message='临时会话含图片与网址消息极大概率被吞，如搜图结果无法显示请换用群聊搜索或添加bot好友~')
-    url=ret.group(1)
+    url=ret.group(2)
+    if 'c2cpicdw.qpic.cn/offpic_new/' in url:
+        file=ret.group(1)
+        md5=file[:-6].upper()
+        url=f"http://gchat.qpic.cn/gchatpic_new/0/0-0-{md5}/0?term=2"
     await bot.send_msg(self_id=sid, user_id=uid, group_id=gid, message='正在搜索，请稍候～')
     result = await get_image_data_sauce(url, SAUCENAO_KEY)
     image_data_report=result[0]
