@@ -37,8 +37,12 @@ def ats_pic(img):
     return img
 
 async def check_screenshot(bot, file, imgurl):
+    pichead = await aiorequests.head(imgurl)
+    if pichead.headers['Content-Type'] =='image/gif':
+        print("gif pic, not likely a screen shot")
+        return 0
     try:
-        image = Image.open(BytesIO(await (await aiorequests.get(imgurl, stream=True, proxies=proxies)).content))
+        image = Image.open(BytesIO(await (await aiorequests.get(imgurl, stream=True)).content))
     except:
         print("download failed")
         return 0
