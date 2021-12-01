@@ -13,7 +13,7 @@ from hoshino.config import NICKNAME
 from aiocqhttp.exceptions import ActionFailed
 
 from .image import get_image_data_sauce, get_image_data_ascii, check_screenshot
-from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK，enableguild
+from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK, enableguild
 
 if type(NICKNAME) == str:
     NICKNAME = [NICKNAME]
