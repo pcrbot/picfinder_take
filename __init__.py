@@ -1,10 +1,11 @@
 import re
-
+import asyncio
 from asyncio import sleep
 from datetime import datetime, timedelta
 
 from nonebot import get_bot
 
+import hoshino
 from hoshino import Service, log, priv
 from hoshino.typing import CQEvent
 from hoshino.util import DailyNumberLimiter
@@ -12,7 +13,7 @@ from hoshino.config import NICKNAME
 from aiocqhttp.exceptions import ActionFailed
 
 from .image import get_image_data_sauce, get_image_data_ascii, check_screenshot
-from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK
+from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK, enableguild
 
 if type(NICKNAME) == str:
     NICKNAME = [NICKNAME]
@@ -222,8 +223,19 @@ async def thanks(bot, ev: CQEvent):
         return
     await bot.send(ev, 'にゃ～')
 
+async def gsend(ev: CQEvent, msg):
+    hbot = hoshino.get_bot()
+    return await hbot.send_guild_channel_msg(
+                        guild_id=ev.guild_id,
+                        channel_id=ev.channel_id,
+                        message=msg,
+                        self_id=ev.self_id
+                    )
 
 async def chain_reply(bot, ev, chain, msg):
+    if ev.detail_type == 'guild':
+        await gsend(ev, msg)
+        return chain
     if not CHAIN_REPLY:
         await bot.send(ev, msg)
         return chain
@@ -271,7 +283,7 @@ async def picfinder(bot, ev, image_data):
             logger.error("ascii2d not found imageInfo")
             chain = await chain_reply(bot, ev, chain, 'ascii2d检索失败…')
 
-    if CHAIN_REPLY:
+    if CHAIN_REPLY and (ev.detail_type != 'guild'):
         await bot.send_group_forward_msg(group_id=ev['group_id'], messages=chain)
 
 bot = get_bot()
@@ -335,3 +347,24 @@ async def picprivite(ctx):
         if not (image_data_report[0] or image_data_report[1]):
             logger.error("ascii2d not found imageInfo")
             await bot.send_msg(self_id=sid, user_id=uid, group_id=gid, message='ascii2d检索失败…')
+
+
+@bot.on_message('guild')
+async def gpicfinder(ev: CQEvent):
+    if (tid := ev.user_id) == ev.self_tiny_id:
+        return
+    if ev.channel_id not in enableguild.get(ev.guild_id, []):
+        return
+    ret = []
+    for i in ev.message:
+        if i['type'] == 'image':
+            ret.append(i['data']['url'])
+    if not ret:
+        return
+    if not lmtd.check(tid):
+        await gsend(ev, f'您今天已经搜过{DAILY_LIMIT}次图了，休息一下明天再来吧～')
+        return
+    await gsend(ev, '正在搜索，请稍候～')
+    bot = hoshino.get_bot()
+    for url in ret:
+        asyncio.get_event_loop().create_task(picfinder(bot, ev, url))
