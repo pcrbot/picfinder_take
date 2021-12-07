@@ -322,7 +322,7 @@ def sauces_info(sauce):
             
             info =part if source in part else f"{source}-{part}"
 
-        elif sauce['header']['index_id'] == 37:
+        elif sauce['header']['index_id'] == 37 or sauce['header']['index_id'] == 371:
             service_name='MangaDex'
             #illust_id=sauce['data']['md_id']
             artist = sauce['data']['artist']
