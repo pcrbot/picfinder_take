@@ -353,7 +353,7 @@ async def picprivite(ctx):
 async def gpicfinder(ev: CQEvent):
     if (tid := ev.user_id) == ev.self_tiny_id:
         return
-    if ev.channel_id not in enableguild.get(ev.guild_id, []):
+    if int(ev.channel_id) not in enableguild.get(int(ev.guild_id), []):
         return
     ret = []
     for i in ev.message:
