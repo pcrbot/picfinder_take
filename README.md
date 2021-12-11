@@ -17,7 +17,7 @@
 
 10.20更新：增加批量搜图计数与吞图提示
 
-12.02更新：增加频道搜图支持，适配go-cqhttp-1.0.0beat8-fix1（还是感谢 [@蓝红心](https://github.com/LHXnois)大佬）
+12.12更新：增加频道搜图支持，适配go-cqhttp-1.0.0beat8-fix2（还是感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
 ## 特点  
 
