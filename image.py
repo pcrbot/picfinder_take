@@ -1,4 +1,6 @@
-import requests, re
+import requests
+import re
+import cloudscraper
 
 from lxml import etree
 from io import BytesIO
@@ -447,14 +449,17 @@ class ascii2d():
         self.num = num
         self.host = HOST_CUSTOM['ASCII'] or "https://ascii2d.net"
         self.header = "————>ascii2d<————"
+        self.scraper = cloudscraper.create_scraper()
 
 
     async def get_search_data(self, url: str, data=None):
         if data is not None:
             html = data
         else:
-            html_data = await aiorequests.get(url, timeout=15, proxies=proxies)
-            html = etree.HTML(await html_data.text)
+            # html_data = await aiorequests.get(url, timeout=15, proxies=proxies)
+            # html = etree.HTML(await html_data.text)
+            html_data = self.scraper.get(url, timeout=15, proxies=proxies)
+            html = etree.HTML(html_data.text)
 
         all_data = html.xpath('//div[@class="row item-box"]')
         info = []
@@ -500,7 +505,8 @@ class ascii2d():
         for line in data:
             if THUMB_ON:
                 try:
-                    thumbnail_image = str(MessageSegment.image(pic2b64(ats_pic(Image.open(BytesIO(await get_pic(line[2])))))))
+                    #thumbnail_image = str(MessageSegment.image(pic2b64(ats_pic(Image.open(BytesIO(await get_pic(line[2])))))))
+                    thumbnail_image = str(MessageSegment.image(pic2b64(ats_pic(Image.open(BytesIO(self.scraper.get(line[2],timeout=20, proxies=proxies).content))))))
                 except Exception as e:
                     print(format_exc())
                     thumbnail_image = "[预览图下载失败]"
@@ -519,8 +525,10 @@ class ascii2d():
         logger.debug(f"Now starting get the {url_index}")
 
         try:
-            html_index_data = await aiorequests.get(url_index, timeout=7, proxies=proxies)
-            html_index = etree.HTML(await html_index_data.text)
+            # html_index_data = await aiorequests.get(url_index, timeout=7, proxies=proxies)
+            # html_index = etree.HTML(await html_index_data.text)
+            html_index_data = self.scraper.get(url_index, timeout=7, proxies=proxies)
+            html_index = etree.HTML(html_index_data.text)
         except Exception as e:
             print(format_exc())
             logger.error(f"ascii2d get html data failed: {e}")
