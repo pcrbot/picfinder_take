@@ -19,7 +19,7 @@
 
 12.12更新：增加频道搜图支持，适配go-cqhttp-1.0.0beat8-fix2（还是感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
-22.01.10更新：修复ascii2d，适配新版图片CQcode，增加IGNORE_STAMP配置项，可在批量搜索中自动忽略沙雕群友发的表情包
+22.01.10更新：修复ascii2d，适配新版图片CQcode，增加IGNORE_STAMP配置项，可在批量搜索中自动忽略subType不为0的非常规图（比如表情包）
 
 ## 特点  
 
