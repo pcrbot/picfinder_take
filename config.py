@@ -16,6 +16,8 @@ THUMB_ON = True      # 是否启用缩略图
 
 CHECK = True      # 是否开启手机截屏判定
 
+IGNORE_STAMP = True      # 是否在批量搜索中忽略表情包
+
 HOST_CUSTOM = {
                   # 自定义Host，不使用留空即可
                   # 格式示例：'https://ascii2d.net' , 'http://localhost:12345'   

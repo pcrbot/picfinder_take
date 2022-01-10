@@ -13,7 +13,7 @@ from hoshino.config import NICKNAME
 from aiocqhttp.exceptions import ActionFailed
 
 from .image import get_image_data_sauce, get_image_data_ascii, check_screenshot
-from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK, enableguild
+from .config import threshold, SAUCENAO_KEY, SEARCH_TIMEOUT, CHAIN_REPLY, DAILY_LIMIT, helptext, CHECK, enableguild, IGNORE_STAMP
 
 if type(NICKNAME) == str:
     NICKNAME = [NICKNAME]
@@ -90,20 +90,26 @@ async def start_finder(bot, ev: CQEvent):
             await bot.send(ev, f'您今天已经搜过{DAILY_LIMIT}次图了，休息一下明天再来吧~', at_sender=True)
             return
     file = ret.group(1)
-    image_data = ret.group(2)
+    url = ret.group(2)
+    
+    if ',subType=' in url:
+        sbtype=url.split('=')[-1]
+        url = url.split(',')[0]
+    else:
+        sbtype=None
     if CHECK:
-        result = await check_screenshot(bot, file, image_data)
+        result = await check_screenshot(bot, file, url)
         if result:
             if result == 1:
                 await bot.send(ev, f'[CQ:reply,id={mid}]该图似乎是手机截屏，请进行适当裁剪后再尝试搜图~\n*请注意搜索漫画时务必截取一个完整单页进行搜图~')
             if result == 2:
                 await bot.send(ev, f'[CQ:reply,id={mid}]该图似乎是长图拼接，请进行适当裁剪后再尝试搜图~\n*请注意搜索漫画时务必截取一个完整单页进行搜图~')
             return
-    if 'c2cpicdw.qpic.cn/offpic_new/' in image_data:
+    if 'c2cpicdw.qpic.cn/offpic_new/' in url:
         md5 = file[:-6].upper()
-        image_data = f"http://gchat.qpic.cn/gchatpic_new/0/0-0-{md5}/0?term=2"
+        url = f"http://gchat.qpic.cn/gchatpic_new/0/0-0-{md5}/0?term=2"
     await bot.send(ev, '正在搜索，请稍候～')
-    await picfinder(bot, ev, image_data)
+    await picfinder(bot, ev, url)
 
 
 @sv.on_message('group')
@@ -138,6 +144,17 @@ async def picmessage(bot, ev: CQEvent):
             return
     file = ret.group(1)
     url = ret.group(2)
+
+    if ',subType=' in url:
+        sbtype=url.split('=')[-1]
+        url = url.split(',')[0]
+    else:
+        sbtype=None
+    if sbtype and IGNORE_STAMP:
+        if sbtype!='0':
+            await bot.send(ev, f'[CQ:reply,id={mid}]该图为表情，已忽略~如确需搜索请尝试单发搜索或回复搜索~')
+            return
+
     if CHECK:
         result = await check_screenshot(bot, file, url)
         if result:
@@ -186,6 +203,13 @@ async def replymessage(bot, ev: CQEvent):
         return
     file = ret.group(1)
     url = ret.group(2)
+
+    if ',subType=' in url:
+        sbtype=url.split('=')[-1]
+        url = url.split(',')[0]
+    else:
+        sbtype=None
+        
     if CHECK:
         result = await check_screenshot(bot, file, url)
         if result:
