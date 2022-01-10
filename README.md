@@ -7,19 +7,20 @@
 
 ---
 
-6.1更新：增加私聊搜图、截屏识别和代理功能
+- 6.1更新：增加私聊搜图、截屏识别和代理功能
 
-6.24更新：增加回复搜图功能，搜图请求更换为异步（感谢 [@蓝红心](https://github.com/LHXnois)大佬）
+- 6.24更新：增加回复搜图功能，搜图请求更换为异步（感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
-7.9更新：增加自定义HOST功能，在qiang内又不想用全局代理的用户(?)可以单独为SauceNao和ascii2d配置反代或ip直连）（继续感谢 [@蓝红心](https://github.com/LHXnois)大佬）
+- 7.9更新：增加自定义HOST功能，在qiang内又不想用全局代理的用户(?)可以单独为SauceNao和ascii2d配置反代或ip直连）（继续感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
-7.26更新：回复搜图增加at支持
+- 7.26更新：回复搜图增加at支持
 
-10.20更新：增加批量搜图计数与吞图提示
+- 10.20更新：增加批量搜图计数与吞图提示
 
-12.12更新：增加频道搜图支持，适配go-cqhttp-1.0.0beat8-fix2（还是感谢 [@蓝红心](https://github.com/LHXnois)大佬）
+- 12.12更新：增加频道搜图支持，适配go-cqhttp-1.0.0beat8-fix2（还是感谢 [@蓝红心](https://github.com/LHXnois)大佬）
 
-22.01.10更新：修复ascii2d，适配新版图片CQcode，增加IGNORE_STAMP配置项，可在批量搜索中自动忽略subType不为0的非常规图（比如表情包）
+- 22.01.10更新：适配新版图片CQcode，增加IGNORE_STAMP配置项，可在批量搜索中自动忽略subType不为0的非常规图（比如表情包）
+尝试使用cloudscraper绕过ascii2d的cf认证，但似乎只在windows端的cloudscraper 1.2.4下可用，linux下不成功，原因未知，等一个大佬.jpg
 
 ## 特点  
 
