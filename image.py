@@ -367,6 +367,14 @@ def sauces_info(sauce):
             title = sauce['data']['title']
             info = f"「{title}」/「{author_name}」"
 
+        elif sauce['header']['index_id'] == 43:
+            service_name='Kemono'
+            #illust_id = sauce['data']['id']
+            service = sauce['data']['service_name']
+            author_name = sauce['data']['user_name']
+            title = sauce['data']['title']
+            info = f"「{title}」/「({service}){author_name}」"
+
         else:
             index = sauce['header']['index_id']
             service_name = f'Index #{index}'
