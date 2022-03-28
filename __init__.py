@@ -270,8 +270,8 @@ async def chain_reply(bot, ev, chain, msg):
         data = {
             "type": "node",
             "data": {
-                    "name": str(NICKNAME[0]),
-                    "user_id": str(ev.self_id),
+                    "name": "小冰",
+                    "uin": "2854196306",
                     "content": str(msg)
             }
         }
