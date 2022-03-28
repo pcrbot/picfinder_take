@@ -21,6 +21,8 @@
 
 - 22.01.10更新：适配新版图片CQcode，增加IGNORE_STAMP配置项，可在批量搜索中自动忽略subType不为0的图片（比如表情包）；用cloudscraper绕过ascii2d近期新增的cf认证
 
+- 22.03.28更新：修复合并转发错误的情况
+
 ## 特点  
 
 - 搜索SauceNao，在相似率过低时自动补充搜索ascii2d，相似率阈值可在config中调整。搜索结果显示数量可在config中调整。  
