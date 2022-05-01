@@ -375,6 +375,13 @@ def sauces_info(sauce):
             title = sauce['data']['title']
             info = f"「{title}」/「({service}){author_name}」"
 
+        elif sauce['header']['index_id'] == 44:
+            service_name='Skeb'
+            #illust_id = sauce['data']['id']
+            creator_name = sauce['data']['creator_name']
+            creator = sauce['data']['creator']
+            info = f"[{creator_name}]({creator})"
+
         else:
             index = sauce['header']['index_id']
             service_name = f'Index #{index}'
