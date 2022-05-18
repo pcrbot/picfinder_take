@@ -473,7 +473,7 @@ class ascii2d():
         else:
             # html_data = await aiorequests.get(url, timeout=15, proxies=proxies)
             # html = etree.HTML(await html_data.text)
-            html_data = self.scraper.get(url, timeout=15, proxies=proxies)
+            html_data = await aiorequests.run_sync_func(self.scraper.get, url, timeout=30, proxies=proxies)
             html = etree.HTML(html_data.text)
 
         all_data = html.xpath('//div[@class="row item-box"]')
@@ -542,7 +542,7 @@ class ascii2d():
         try:
             # html_index_data = await aiorequests.get(url_index, timeout=7, proxies=proxies)
             # html_index = etree.HTML(await html_index_data.text)
-            html_index_data = self.scraper.get(url_index, timeout=7, proxies=proxies)
+            html_index_data = await aiorequests.run_sync_func(self.scraper.get, url_index, timeout=7, proxies=proxies)
             html_index = etree.HTML(html_index_data.text)
         except Exception as e:
             print(format_exc())
