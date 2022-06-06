@@ -204,17 +204,32 @@ async def replymessage(bot, ev: CQEvent):
         tmsg = await bot.get_msg(self_id=ev.self_id, message_id=int(tmid))
     except ActionFailed:
         await bot.finish(ev, '该消息已过期，请重新转发~')
-    file = ''
-    print(tmsg)
-    for m in tmsg["message"]:
-        if m["type"] == 'image':
-            file=m['file']
-            url=m['url']
-            subType=m['subType']
-            break
-    if not file:
+    # file = ''
+    # print(tmsg)
+    # for m in tmsg["message"]:
+    #     if m["type"] == 'image':
+    #         file=m['file']
+    #         url=m['url']
+    #         subType=m['subType']
+    #         break
+    # if not file:
+    #     await bot.send(ev, '未找到图片~')
+    #     return
+    ret = re.search(r"\[CQ:image,file=(.*)?,url=(.*)\]", str(tmsg["message"]))
+    if not ret:
         await bot.send(ev, '未找到图片~')
         return
+    file = ret.group(1)
+    url = ret.group(2)
+    
+    if ',subType=' in url:
+        sbtype=url.split('=')[-1]
+        url = url.split(',')[0]
+    elif ',subType=' in file:
+        sbtype=file.split('=')[-1]
+        file = file.split(',')[0]
+    else:
+        sbtype=None
         
     if CHECK:
         result = await check_screenshot(bot, file, url)
